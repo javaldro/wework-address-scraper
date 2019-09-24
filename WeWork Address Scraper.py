@@ -1,9 +1,6 @@
 
 # coding: utf-8
 
-# In[ ]:
-
-
 # Importing Packages
 import pycurl
 from StringIO import StringIO
@@ -17,18 +14,12 @@ from bs4 import BeautifulSoup
 import time
 
 
-# In[ ]:
-
-
 # Getting the HTML from each WeWork Location
 url = 'https://www.wework.com/locations'
 response = requests.get(url, params={"search_api_views_fulltext": ""})
 soup = BeautifulSoup(response.text, "lxml")
 #  note: if this link doesn't work, find the new tag by inspecting one of the city links
 locations = soup.find_all("a", {"class":"sl_norewrite marketLink__countryList__F4CBD baseLink__countryList__22den weLink-sc-5sbo5g-0 kbLrON"})
-
-
-# In[ ]:
 
 
 # Getting Clean Location Link Stubs
@@ -38,10 +29,7 @@ for loc in range(0,len(locations)):
     link_stub = selector['href']
     link_stub_list.append(link_stub)
 
-
-# In[ ]:
-
-
+    
 coworking_spaces = []
 # Iterating Over Each location
 for city in tqdm(link_stub_list):
@@ -68,9 +56,6 @@ for city in tqdm(link_stub_list):
     coworking_spaces.append(space)
 
 
-# In[ ]:
-
-
 # Flattening out the nested list
 flat_list = [item for sublist in coworking_spaces for item in sublist]
 # Creating list to put cleaned strings in
@@ -95,14 +80,8 @@ for item in range(0,len(flat_list)):
     cleaned_full_address_list.append(cleaned_address)
 
 
-# In[ ]:
-
-
 # Converting Lists into a dataframe
 address_df = pd.DataFrame(list(zip(cleaned_full_address_list, cleaned_state_list, cleaned_zip_list)), columns =['Full Address', 'State', 'Zip'])
-
-
-# In[ ]:
 
 
 # Writing CSV to local directory
